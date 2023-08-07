@@ -8,7 +8,7 @@ import 'package:restaurant_app/infrastructure/provider/provider_registration.dar
 import 'package:restaurant_app/infrastructure/response/restaurant_response_data.dart';
 import 'package:restaurant_app/screens/common/app_text.dart';
 import 'package:restaurant_app/screens/common/bottom_sheet.dart';
-import 'package:restaurant_app/screens/ui/bottom_sheet/food_menu_bottomsheet.dart';
+import 'package:restaurant_app/screens/ui/home_screens/common/food_menu_bottomsheet.dart';
 import 'package:restaurant_app/screens/ui/home_screens/common/category_tile.dart';
 import 'package:restaurant_app/screens/ui/home_screens/common/meat_status_capsule.dart';
 import 'package:restaurant_app/screens/ui/home_screens/common/menu_type_widget.dart';
@@ -57,18 +57,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // testttt();
     final homeProviderWatch = ref.watch(homeProvider);
     final homeProviderRead = ref.read(homeProvider);
     return Scaffold(
       body: Column(
         children: [
           const SizedBox(height: 12),
-          // Center(
-          //   child: SvgPicture.asset(
-          //     ImageConstants.explorexLogo,
-          //   ),
-          // ),
+          Center(
+            child: SvgPicture.asset(
+              ImageConstants.explorexLogo,
+            ),
+          ),
           const SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.symmetric(
@@ -142,40 +141,96 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: InkWell(
-        child: InkWell(
-          onTap: () {
-            CommonBottomSheet.customBottomSheet(
-                context: context,
-                child: FoodMenuBottomSheet(
-                  categoryKeys: ref.watch(homeProvider).categoryKeys,
-                  categoryValues: ref.watch(homeProvider).categoryValues,
-                  meatStatusKeys: ref.watch(homeProvider).meatStatusKeys,
-                  meatStatusValues: ref.watch(homeProvider).meatStatusValues,
-                ));
-          },
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              color: ColorConstants.gray900,
-            ),
-            height: 40,
-            width: 155,
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SvgPicture.asset(
-                ImageConstants.categoriesIcon,
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          InkWell(
+            onTap: () {
+              CommonBottomSheet.customBottomSheet(
+                  context: context,
+                  child: FoodMenuBottomSheet(
+                    categoryKeys: ref.watch(homeProvider).categoryKeys,
+                    categoryValues: ref.watch(homeProvider).categoryValues,
+                    meatStatusKeys: ref.watch(homeProvider).meatStatusKeys,
+                    meatStatusValues: ref.watch(homeProvider).meatStatusValues,
+                  ));
+            },
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 18),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                color: ColorConstants.gray900,
               ),
-              const SizedBox(width: 8),
-              const AppText(
-                title: 'View Categories',
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
-                titleColor: ColorConstants.gray50,
-              )
-            ]),
+              height: 40,
+              width: 155,
+              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                SvgPicture.asset(
+                  ImageConstants.categoriesIcon,
+                ),
+                const SizedBox(width: 8),
+                const AppText(
+                  title: 'View Categories',
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                  titleColor: ColorConstants.gray50,
+                )
+              ]),
+            ),
           ),
-        ),
+          if (homeProviderWatch.cartData.isNotEmpty)
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: ColorConstants.indigo400,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppText(
+                          title: 'Rs ${homeProviderWatch.totalCartPrice}',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          titleColor: ColorConstants.gray50,
+                        ),
+                        AppText(
+                          title: '${homeProviderWatch.cartData.length} items',
+                          fontSize: 9,
+                          titleColor: ColorConstants.gray50,
+                        )
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: ColorConstants.gray50,
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AppText(
+                            title: "View & Order",
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            titleColor: ColorConstants.indigo400,
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          const SizedBox(height: 24),
+        ],
       ),
     );
   }

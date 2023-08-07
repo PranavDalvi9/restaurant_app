@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:restaurant_app/infrastructure/common/constants/color_constants.dart';
 import 'package:restaurant_app/infrastructure/provider/provider_registration.dart';
 import 'package:restaurant_app/screens/common/app_text.dart';
+import 'package:restaurant_app/screens/common/bottom_sheet.dart';
 import 'package:restaurant_app/screens/ui/home_screens/common/menu_card.dart';
+import 'package:restaurant_app/screens/ui/home_screens/common/menu_detail.dart';
 
 class CategoryTile extends ConsumerStatefulWidget {
   final String title;
@@ -25,6 +27,7 @@ class CategoryTile extends ConsumerStatefulWidget {
 class _CategoryTileState extends ConsumerState<CategoryTile> {
   @override
   Widget build(BuildContext context1) {
+    final homeProviderRead = ref.read(homeProvider);
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
@@ -69,13 +72,20 @@ class _CategoryTileState extends ConsumerState<CategoryTile> {
           children: [
             for (int i = 0; i < widget.data.length; i++)
               menuCardWidget(
-                context: context,
-                title: widget.data[i]['dish']['name'],
-                description: widget.data[i]['dish']['description'],
-                displayPrice: widget.data[i]['displayPrice'].toString(),
-                sellingPrice: widget.data[i]['sellingPrice'].toString(),
-                image: widget.data[i]['dish']['hasImage'] ? widget.data[i]['dish']['image'] : "",
-              ),
+                  context: context,
+                  data: widget.data[i],
+                  title: widget.data[i]['dish']['name'],
+                  description: widget.data[i]['dish']['description'],
+                  displayPrice: widget.data[i]['displayPrice'].toString(),
+                  sellingPrice: widget.data[i]['sellingPrice'].toString(),
+                  image: widget.data[i]['dish']['hasImage'] ? widget.data[i]['dish']['image'] : "",
+                  onTap: () {
+                    homeProviderRead.setCartData(widget.data[i]);
+                  },
+                  onTapCard: () {
+                    homeProviderRead.setSelectedMenuData(widget.data[i]);
+                    CommonBottomSheet.customBottomSheet(context: context, child: const MenuDetail());
+                  }),
           ],
         ),
       ),

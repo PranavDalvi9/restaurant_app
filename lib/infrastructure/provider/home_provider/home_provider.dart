@@ -11,11 +11,30 @@ class HomeProvider extends ChangeNotifier {
 
   int? selectedTile;
 
+  num totalCartPrice = 0;
+
   List<Map<String, Map<String, List<Map<String, dynamic>>>>> groupedAndFilteredDataList = [];
   List<String> meatStatusKeys = [];
   List meatStatusValues = [];
   List<String> categoryKeys = [];
   List categoryValues = [];
+
+  Map? selectedMenuData;
+
+  setSelectedMenuData(Map data) {
+    selectedMenuData = data;
+    notifyListeners();
+  }
+
+  List cartData = [];
+
+  setCartData(Map data) {
+    cartData.add(data);
+    for (var items in cartData) {
+      totalCartPrice = totalCartPrice + items['sellingPrice'];
+    }
+    notifyListeners();
+  }
 
   setSelectedTile(int value) {
     selectedTile = value;

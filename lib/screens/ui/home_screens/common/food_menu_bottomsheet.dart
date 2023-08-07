@@ -28,11 +28,22 @@ class FoodMenuBottomSheet extends ConsumerStatefulWidget {
 class _FoodMenuBottomSheetState extends ConsumerState<FoodMenuBottomSheet> {
   @override
   Widget build(BuildContext context) {
-    // int level = 0;
     final homeProviderWatch = ref.watch(homeProvider);
     final homeProviderRead = ref.read(homeProvider);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 24),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: AppText(
+            title: "MENU TYPE (${restaurantResponse['description']["menus"].length})",
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            titleColor: ColorConstants.gray500,
+            titleTextAlign: TextAlign.start,
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -77,6 +88,22 @@ class _FoodMenuBottomSheetState extends ConsumerState<FoodMenuBottomSheet> {
             ],
           ),
         ),
+        const SizedBox(
+          height: 16,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: AppText(
+            title: "Categories (${ref.watch(homeProvider).categoryKeys.length})",
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            titleColor: ColorConstants.gray500,
+            titleTextAlign: TextAlign.start,
+          ),
+        ),
+        const SizedBox(
+          height: 8,
+        ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           height: MediaQuery.of(context).size.height * 0.6,
@@ -106,6 +133,7 @@ class _FoodMenuBottomSheetState extends ConsumerState<FoodMenuBottomSheet> {
                                   groupValue: homeProviderWatch.selectedTile,
                                   onChanged: (value) {
                                     ref.read(homeProvider).setSelectedTile(value ?? 0);
+                                    Navigator.pop(context);
                                   }),
                               SizedBox(
                                 width: MediaQuery.of(context).size.width - 100,
