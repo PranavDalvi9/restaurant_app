@@ -6,6 +6,7 @@ import 'package:restaurant_app/infrastructure/common/constants/color_constants.d
 import 'package:restaurant_app/infrastructure/common/constants/image_constants.dart';
 import 'package:restaurant_app/infrastructure/provider/provider_registration.dart';
 import 'package:restaurant_app/infrastructure/response/restaurant_response_data.dart';
+import 'package:restaurant_app/screens/common/app_text.dart';
 import 'package:restaurant_app/screens/ui/home_screens/common/category_tile.dart';
 import 'package:restaurant_app/screens/ui/home_screens/common/meat_status_capsule.dart';
 import 'package:restaurant_app/screens/ui/home_screens/common/menu_type_widget.dart';
@@ -96,12 +97,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          Padding(
+          Container(
+            height: 54,
             padding: const EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 12.5,
             ),
-            child: Row(
+            child: ListView(
+              scrollDirection: Axis.horizontal,
               children: [
                 for (int i = 0; i < meatStatusKeys.length; i++)
                   meatStatusCapsule(
@@ -125,19 +128,45 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               color: ColorConstants.gray300,
               child: Column(
                 children: [
-                  const SizedBox(height: 16),
-                  for (int i = 0; i < categoryKeys.length; i++)
-                    categoryTile(
-                      title: categoryKeys[i],
-                      subTitle: categoryValues[i].length.toString(),
-                      context: context,
-                      data: categoryValues[i],
-                    )
+                  ListView.builder(
+                      key: Key('builder ${homeProviderWatch.selectedTile.toString()}'),
+                      shrinkWrap: true,
+                      itemCount: categoryKeys.length,
+                      itemBuilder: (context, index) {
+                        return CategoryTile(
+                          title: categoryKeys[index],
+                          subTitle: categoryValues[index].length.toString(),
+                          data: categoryValues[index],
+                          ind: index,
+                        );
+                      })
                 ],
               ),
             ),
           )),
         ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(50),
+          color: ColorConstants.gray900,
+        ),
+        height: 40,
+        width: 155,
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          SvgPicture.asset(
+            ImageConstants.categoriesIcon,
+          ),
+          const SizedBox(width: 8),
+          const AppText(
+            title: 'View Categories',
+            fontSize: 10,
+            fontWeight: FontWeight.w600,
+            titleColor: ColorConstants.gray50,
+          )
+        ]),
       ),
     );
   }

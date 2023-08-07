@@ -6,4 +6,5 @@ class ImageConstants {
   static const String vegIcon = "${path}veg-icon.svg";
   static const String likeIcon = "${path}like-icon.svg";
   static const String dropDownFood = "${path}dropDownFood.png";
+  static const String categoriesIcon = "${path}categories-icon.svg";
 }

@@ -10,6 +10,7 @@ Widget menuCardWidget({
   required String description,
   required String sellingPrice,
   required String displayPrice,
+  required String image,
 }) {
   return Container(
     decoration: const BoxDecoration(
@@ -58,6 +59,7 @@ Widget menuCardWidget({
                 title: title,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
+                overflow: TextOverflow.visible,
               ),
               const SizedBox(height: 6),
               AppText(
@@ -85,9 +87,24 @@ Widget menuCardWidget({
         ),
         Column(
           children: [
-            SizedBox(
+            if (image.isNotEmpty)
+              SizedBox(
+                width: 100,
+                child: Image.network(image),
+              ),
+            Container(
               width: 100,
-              child: Image.asset(ImageConstants.dropDownFood),
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(color: ColorConstants.indigo400, width: 2),
+              ),
+              child: const AppText(
+                titleTextAlign: TextAlign.center,
+                title: "Add",
+                fontSize: 12,
+                titleColor: ColorConstants.indigo400,
+              ),
             )
           ],
         )

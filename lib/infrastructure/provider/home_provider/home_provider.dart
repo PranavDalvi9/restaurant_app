@@ -9,6 +9,13 @@ class HomeProvider extends ChangeNotifier {
 
   int selectedMeatStatus = 0;
 
+  int? selectedTile;
+
+  setSelectedTile(int value) {
+    selectedTile = value;
+    notifyListeners();
+  }
+
   setSelectedFoodMenu(int value) {
     selectedFoodMenu = value;
     notifyListeners();
