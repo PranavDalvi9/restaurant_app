@@ -7,6 +7,8 @@ import 'package:restaurant_app/infrastructure/common/constants/image_constants.d
 import 'package:restaurant_app/infrastructure/provider/provider_registration.dart';
 import 'package:restaurant_app/infrastructure/response/restaurant_response_data.dart';
 import 'package:restaurant_app/screens/common/app_text.dart';
+import 'package:restaurant_app/screens/common/bottom_sheet.dart';
+import 'package:restaurant_app/screens/ui/bottom_sheet/food_menu_bottomsheet.dart';
 import 'package:restaurant_app/screens/ui/home_screens/common/category_tile.dart';
 import 'package:restaurant_app/screens/ui/home_screens/common/meat_status_capsule.dart';
 import 'package:restaurant_app/screens/ui/home_screens/common/menu_type_widget.dart';
@@ -19,12 +21,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  List<Map<String, Map<String, List<Map<String, dynamic>>>>> groupedAndFilteredDataList = [];
-  List<String> meatStatusKeys = [];
-  List meatStatusValues = [];
-  List<String> categoryKeys = [];
-  List categoryValues = [];
-
   testttt() {
     for (var menu in restaurantResponse['description']["menus"]) {
       Map<String, Map<String, List<Map<String, dynamic>>>> groupedAndFilteredData = {};
@@ -44,37 +40,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         groupedAndFilteredData[meatStatus]![category]!.add(entry);
       }
 
-      groupedAndFilteredDataList.add(groupedAndFilteredData);
+      ref.read(homeProvider).groupedAndFilteredDataList.add(groupedAndFilteredData);
     }
-    setMeatStatusKey();
-    inspect(groupedAndFilteredDataList);
+    ref.read(homeProvider).setMeatStatusKey();
+    inspect(ref.watch(homeProvider).groupedAndFilteredDataList);
   }
 
-  setMeatStatusKey() {
-    meatStatusKeys = groupedAndFilteredDataList[ref.watch(homeProvider).selectedFoodMenu].keys.toList();
-    meatStatusValues = groupedAndFilteredDataList[ref.watch(homeProvider).selectedFoodMenu].values.toList();
-    setCategoryKey();
-  }
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      testttt();
+    });
 
-  setCategoryKey() {
-    categoryKeys = meatStatusValues[ref.watch(homeProvider).selectedMeatStatus].keys.toList();
-    categoryValues = meatStatusValues[ref.watch(homeProvider).selectedMeatStatus].values.toList();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    testttt();
+    // testttt();
     final homeProviderWatch = ref.watch(homeProvider);
     final homeProviderRead = ref.read(homeProvider);
     return Scaffold(
       body: Column(
         children: [
           const SizedBox(height: 12),
-          Center(
-            child: SvgPicture.asset(
-              ImageConstants.explorexLogo,
-            ),
-          ),
+          // Center(
+          //   child: SvgPicture.asset(
+          //     ImageConstants.explorexLogo,
+          //   ),
+          // ),
           const SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.symmetric(
@@ -90,7 +84,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     isSelected: homeProviderWatch.selectedFoodMenu == i ? true : false,
                     onTap: () {
                       homeProviderRead.setSelectedFoodMenu(i);
-                      setMeatStatusKey();
+                      homeProviderRead.setSelectedMeatStatus(0);
+                      ref.read(homeProvider).setMeatStatusKey();
                     },
                   ),
               ],
@@ -106,14 +101,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                for (int i = 0; i < meatStatusKeys.length; i++)
+                for (int i = 0; i < ref.read(homeProvider).meatStatusKeys.length; i++)
                   meatStatusCapsule(
                     context: context,
                     icon: ImageConstants.vegIcon,
-                    title: meatStatusKeys[i],
+                    title: ref.watch(homeProvider).meatStatusKeys[i],
                     onTap: () {
                       homeProviderRead.setSelectedMeatStatus(i);
-                      setCategoryKey();
+                      ref.read(homeProvider).setCategoryKey();
                     },
                     isSelected: homeProviderWatch.selectedMeatStatus == i,
                   ),
@@ -131,12 +126,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ListView.builder(
                       key: Key('builder ${homeProviderWatch.selectedTile.toString()}'),
                       shrinkWrap: true,
-                      itemCount: categoryKeys.length,
+                      itemCount: ref.watch(homeProvider).categoryKeys.length,
                       itemBuilder: (context, index) {
                         return CategoryTile(
-                          title: categoryKeys[index],
-                          subTitle: categoryValues[index].length.toString(),
-                          data: categoryValues[index],
+                          title: ref.watch(homeProvider).categoryKeys[index],
+                          subTitle: ref.watch(homeProvider).categoryValues[index].length.toString(),
+                          data: ref.watch(homeProvider).categoryValues[index],
                           ind: index,
                         );
                       })
@@ -147,26 +142,40 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
-          color: ColorConstants.gray900,
-        ),
-        height: 40,
-        width: 155,
-        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SvgPicture.asset(
-            ImageConstants.categoriesIcon,
+      floatingActionButton: InkWell(
+        child: InkWell(
+          onTap: () {
+            CommonBottomSheet.customBottomSheet(
+                context: context,
+                child: FoodMenuBottomSheet(
+                  categoryKeys: ref.watch(homeProvider).categoryKeys,
+                  categoryValues: ref.watch(homeProvider).categoryValues,
+                  meatStatusKeys: ref.watch(homeProvider).meatStatusKeys,
+                  meatStatusValues: ref.watch(homeProvider).meatStatusValues,
+                ));
+          },
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              color: ColorConstants.gray900,
+            ),
+            height: 40,
+            width: 155,
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              SvgPicture.asset(
+                ImageConstants.categoriesIcon,
+              ),
+              const SizedBox(width: 8),
+              const AppText(
+                title: 'View Categories',
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+                titleColor: ColorConstants.gray50,
+              )
+            ]),
           ),
-          const SizedBox(width: 8),
-          const AppText(
-            title: 'View Categories',
-            fontSize: 10,
-            fontWeight: FontWeight.w600,
-            titleColor: ColorConstants.gray50,
-          )
-        ]),
+        ),
       ),
     );
   }

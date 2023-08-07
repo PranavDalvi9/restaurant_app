@@ -9,36 +9,35 @@ Widget menuTypeWidget({
   required bool isSelected,
   required VoidCallback onTap,
 }) {
-  return Expanded(
-    child: InkWell(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.only(right: 8),
-        height: 72,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: isSelected ? ColorConstants.indigo400 : Colors.transparent,
-            width: 4,
-          ),
-          image: const DecorationImage(
-            image: AssetImage(
-              ImageConstants.food,
-            ),
-            fit: BoxFit.fill,
-          ),
-          borderRadius: BorderRadius.circular(8),
+  return InkWell(
+    onTap: onTap,
+    child: Container(
+      width: (MediaQuery.of(context).size.width - 50) / 2,
+      margin: const EdgeInsets.only(right: 8),
+      height: 72,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: isSelected ? ColorConstants.indigo400 : Colors.transparent,
+          width: 4,
         ),
-        child: Container(
-          alignment: Alignment.bottomLeft,
-          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
-          color: Colors.black.withOpacity(0.42),
-          child: AppText(
-            title: title,
-            fontSize: 12,
-            fontWeight: FontWeight.w800,
-            titleColor: ColorConstants.gray50,
-            titleTextAlign: TextAlign.end,
+        image: const DecorationImage(
+          image: AssetImage(
+            ImageConstants.food,
           ),
+          fit: BoxFit.fill,
+        ),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Container(
+        alignment: Alignment.bottomLeft,
+        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
+        color: Colors.black.withOpacity(0.42),
+        child: AppText(
+          title: title,
+          fontSize: 12,
+          fontWeight: FontWeight.w800,
+          titleColor: ColorConstants.gray50,
+          titleTextAlign: TextAlign.end,
         ),
       ),
     ),
