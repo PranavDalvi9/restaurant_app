@@ -73,6 +73,7 @@ class _CategoryTileState extends ConsumerState<CategoryTile> {
             for (int i = 0; i < widget.data.length; i++)
               menuCardWidget(
                   context: context,
+                  meatStatus: widget.data[i]['dish']['meatStatus'],
                   data: widget.data[i],
                   title: widget.data[i]['dish']['name'],
                   description: widget.data[i]['dish']['description'],

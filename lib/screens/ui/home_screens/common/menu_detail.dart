@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:restaurant_app/infrastructure/common/constants/color_constants.dart';
-import 'package:restaurant_app/infrastructure/common/constants/image_constants.dart';
 import 'package:restaurant_app/infrastructure/provider/provider_registration.dart';
 import 'package:restaurant_app/screens/common/app_text.dart';
+import 'package:restaurant_app/screens/ui/home_screens/home_screen.dart';
 
 class MenuDetail extends ConsumerStatefulWidget {
   const MenuDetail({super.key});
@@ -38,9 +38,7 @@ class _MenuDetailState extends ConsumerState<MenuDetail> {
             ),
           Row(
             children: [
-              SvgPicture.asset(
-                ImageConstants.vegIcon,
-              ),
+              SvgPicture.asset(meatStatusIcon(homeProviderWatch.selectedMenuData?['dish']['meatStatus'])),
               const SizedBox(width: 8),
               AppText(
                 title: homeProviderWatch.selectedMenuData?['dish']['name'],

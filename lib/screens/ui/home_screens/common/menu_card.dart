@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:restaurant_app/infrastructure/common/constants/color_constants.dart';
 import 'package:restaurant_app/infrastructure/common/constants/image_constants.dart';
 import 'package:restaurant_app/screens/common/app_text.dart';
+import 'package:restaurant_app/screens/ui/home_screens/home_screen.dart';
 
 Widget menuCardWidget({
   required BuildContext context,
@@ -14,6 +15,7 @@ Widget menuCardWidget({
   required Map data,
   required VoidCallback onTap,
   required VoidCallback onTapCard,
+  required String meatStatus,
 }) {
   return InkWell(
     onTap: onTapCard,
@@ -34,7 +36,7 @@ Widget menuCardWidget({
               children: [
                 Row(
                   children: [
-                    SvgPicture.asset(ImageConstants.vegIcon),
+                    SvgPicture.asset(meatStatusIcon(meatStatus)),
                     const SizedBox(width: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(

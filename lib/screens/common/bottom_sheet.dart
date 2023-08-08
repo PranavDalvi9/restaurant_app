@@ -29,9 +29,7 @@ class CommonBottomSheet {
                         Icons.close,
                         size: 8,
                         color: ColorConstants.gray50,
-                      )
-                      //  Divider(thickness: 2, color: Colors.red),
-                      ),
+                      )),
                 ),
                 const SizedBox(
                   height: 12,
