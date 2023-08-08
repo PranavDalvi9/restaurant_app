@@ -26,12 +26,12 @@ Widget menuTypeWidget({
           ),
           fit: BoxFit.fill,
         ),
+        color: Colors.black.withOpacity(0.42),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Container(
         alignment: Alignment.bottomLeft,
         padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
-        color: Colors.black.withOpacity(0.42),
         child: AppText(
           title: title,
           fontSize: 12,

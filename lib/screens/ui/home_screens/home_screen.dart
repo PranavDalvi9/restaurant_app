@@ -70,12 +70,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                Padding(
+                Container(
+                  height: 90,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 8,
                   ),
-                  child: Row(
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
                     children: [
                       for (int i = 0; i < restaurantResponse['description']["menus"].length; i++)
                         menuTypeWidget(
